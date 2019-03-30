@@ -28,33 +28,38 @@ pipeline {
       }
     }
     stage('Linting') { // Run pylint against your code
-      script {
-        sh """
-        pylint **/*.py
-        """
+      steps {
+        script {
+          sh """
+          pylint **/*.py
+          """
+        }
       }
     }
     stage('Unit Testing') { // Perform unit testing
-      script {
-        sh """
-        python -m unittest discover -s tests/unit
-        """
+      steps {
+        script {
+          sh """
+          python -m unittest discover -s tests/unit
+          """
+        }
       }
     }
     stage('Integration Testing') { //Perform integration testing
-      script {
-        sh """
-        # You have the option to stand up a temporary environment to perform
-        # these tests and/or run the tests against an existing environment. The
-        # advantage to the former is you can ensure the environment is clean
-        # and in a desired initial state. The easiest way to stand up a temporary
-        # environment is to use Docker and a wrapper script to orchestrate the
-        # process. This script will handle standing up supporting services like
-        # MySQL & Redis, running DB migrations, starting the web server, etc.
-        # You can utilize your existing automation, your custom scripts and Make.
-        ./standup_testing_environment.sh # Name this whatever you'd like
+      steps {
+        script {
+          sh """
+          # You have the option to stand up a temporary environment to perform
+          # these tests and/or run the tests against an existing environment. The
+          # advantage to the former is you can ensure the environment is clean
+          # and in a desired initial state. The easiest way to stand up a temporary
+          # environment is to use Docker and a wrapper script to orchestrate the
+          # process. This script will handle standing up supporting services like
+          # MySQL & Redis, running DB migrations, starting the web server, etc.
+          # You can utilize your existing automation, your custom scripts and Make.
+          ./standup_testing_environment.sh # Name this whatever you'd like
 
-        python -m unittest discover -s tests/integration
+          python -m unittest discover -s tests/integration
         """
       }
     }
